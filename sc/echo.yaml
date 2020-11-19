@@ -1,0 +1,51 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: echo
+    version: v1
+  name: echo-v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: echo
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: echo
+        version: v1
+    spec:
+      containers:
+      - image: zhongfox/sc:v1
+        imagePullPolicy: Always
+        name: echo
+        ports:
+        - containerPort: 7000
+          protocol: TCP
+        env:
+        - name: SERVICE
+          value: echo
+        - name: MY_POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: echo
+  name: echo
+spec:
+  ports:
+    - name: http
+      port: 7000
+      protocol: TCP
+  selector:
+    app: echo
+  type: ClusterIP
+---

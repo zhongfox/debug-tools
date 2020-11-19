@@ -1,0 +1,33 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: debug
+  labels:
+    istio-injection: enabled
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: client
+  name: client
+  namespace: debug
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client
+  template:
+    metadata:
+      labels:
+        app: client
+    spec:
+      containers:
+        - image: zhongfox/sc:v1
+          imagePullPolicy: Always
+          name: client
+          env:
+          - name: DESTINATIONS
+            value: svc1,svc2,svc3
