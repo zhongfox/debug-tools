@@ -6,6 +6,12 @@ $stdout.sync = true
 service = ENV['SERVICE']
 destinations = ENV['DESTINATIONS']
 
+
+def get_headers env
+  env.select { |k,v| k.start_with? 'HTTP_'}.
+    transform_keys { |k| k.sub(/^HTTP_/, '').split('_').map(&:capitalize).join('-') }
+end
+
 def start_service service
   pod_ip = ENV['MY_POD_IP'] ||  '0.0.0.0'
   puts "starting service #{service}, bind to #{pod_ip}"
@@ -14,7 +20,9 @@ def start_service service
   set :port, 7000
   get "/#{service}" do
     content_type :text
-    puts "=> receiving call from #{request.ip} #{headers["X-Forwarded-For"]}"
+    h = get_headers request.env
+    puts h
+    puts "=> receiving call from #{request.ip} REMOTE_ADDR: #{request.env["REMOTE_ADDR"]} X-Forwarded-For:#{h["X-Forwarded-For"]}"
     "<= #{service}(#{Socket.gethostname} #{my_first_private_ipv4}) say hi"
   end
 end

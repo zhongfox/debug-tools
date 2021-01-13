@@ -1,0 +1,54 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: test-gw
+  namespace: debug
+spec:
+  servers:
+    - port:
+        number: 7000
+        name: svc1
+        protocol: HTTP
+      hosts:
+        - '*'
+  selector:
+    app: istio-ingressgateway
+    istio: ingressgateway
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: test-vs
+  namespace: default
+spec:
+  hosts:
+    - '*'
+  gateways:
+    - debug/test-gw
+  http:
+    - match:
+        - uri:
+            exact: /svc1
+      route:
+        - destination:
+            host: svc1.debug.svc.cluster.local
+            port:
+              number: 7000
+    - match:
+        - uri:
+            exact: /svc2
+      route:
+        - destination:
+            host: svc2.debug.svc.cluster.local
+            port:
+              number: 7000
+    - match:
+        - uri:
+            exact: /svc3
+      route:
+        - destination:
+            host: svc3.debug.svc.cluster.local
+            port:
+              number: 7000
+
