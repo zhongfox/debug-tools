@@ -5,6 +5,7 @@ metadata:
   name: debug
   labels:
     istio-injection: enabled
+    istio.io/rev: 1-8-1
 ---
 
 apiVersion: apps/v1

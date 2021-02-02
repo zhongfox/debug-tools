@@ -1,0 +1,31 @@
+proto_outdir = "./proto"
+
+[[dependencies]]
+  target = "github.com/cncf/udpa/udpa"
+  revision = "7e6fe0510fb53d1053138b61476ec271b519602c"
+  branch = "master"
+  path = "./udpa"
+
+[[dependencies]]
+  target = "github.com/googleapis/googleapis/google"
+  revision = "b3c2eb02e501d7eec36b4b08fcd981f32f8b4ff4"
+  branch = "master"
+  path = "./google"
+
+[[dependencies]]
+  target = "github.com/envoyproxy/protoc-gen-validate/validate"
+  revision = "ec9cd95372b9630aafba2cb4a0e448c43768e0df"
+  branch = "master"
+  path = "./validate"
+
+[[dependencies]]
+  target = "github.com/envoyproxy/envoy/api/envoy"
+  revision = "9e983b04a71ca326889e7c1a47e67116ae197e6c"
+  branch = "master"
+  path = "./envoy"
+
+[[dependencies]]
+  target = "github.com/istio/api"
+  revision = "78e48caf1ad9753047a360c0b7c2a8c2f637c938"
+  branch = "master"
+  path = "./istio"

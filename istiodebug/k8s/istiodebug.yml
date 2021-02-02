@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: istiodebug
+  name: istiodebug
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: istiodebug
+  template:
+    metadata:
+      labels:
+        app: istiodebug
+    spec:
+      containers:
+        - image: zhongfox/istiodebug
+          imagePullPolicy: Always
+          name: istiodebug
+          ports:
+            - containerPort: 80
+              protocol: TCP
+            - containerPort: 443
+              protocol: TCP
+            - containerPort: 8080
+              protocol: TCP
+
+---
+ apiVersion: v1
+ kind: Service
+ metadata:
+   labels:
+     app: istiodebug
+   name: istiodebug
+ spec:
+   ports:
+     - name: http-server
+       port: 80
+       protocol: TCP
+     - name: http-any
+       port: 8080
+       protocol: TCP
+   selector:
+     app: istiodebug
+   type: ClusterIP
+

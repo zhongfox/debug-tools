@@ -1,0 +1,26 @@
+proto_outdir = "./proto"
+
+
+[[dependencies]]
+  target = "github.com/cncf/udpa/udpa"
+  branch = "master"
+  path = "./udpa"
+[[dependencies]]
+  target = "github.com/googleapis/googleapis/google"
+  branch = "master"
+  path = "./google"
+
+[[dependencies]]
+  target = "github.com/envoyproxy/protoc-gen-validate/validate"
+  branch = "master"
+  path = "./validate"
+
+[[dependencies]]
+  target = "github.com/envoyproxy/envoy/api/envoy"
+  branch = "master"
+  path = "./envoy"
+
+[[dependencies]]
+  target = "github.com/istio/api"
+  branch = "master"
+  path = "./istio"
