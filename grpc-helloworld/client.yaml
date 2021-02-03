@@ -28,7 +28,7 @@ spec:
       containers:
         - image: zhongfox/grpc-client:v1
           imagePullPolicy: Always
-          name: grpc-client
+          name: app
           env:
             - name: MY_POD_NAME
               valueFrom:

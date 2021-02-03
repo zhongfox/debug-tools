@@ -28,7 +28,7 @@ spec:
       containers:
         - image: zhongfox/grpc-server:v1
           imagePullPolicy: Always
-          name: grpc-server
+          name: app
           ports:
             - containerPort: 7001
               protocol: TCP
