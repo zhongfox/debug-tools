@@ -28,15 +28,15 @@ spec:
         version: v1
     spec:
       containers:
-      - image: zhongfox/sc:v1
-        imagePullPolicy: Always
-        name: svc3
-        ports:
-        - containerPort: 7000
-          protocol: TCP
-        env:
-        - name: SERVICE
-          value: svc3
+        - image: zhongfox/sc:v1
+          imagePullPolicy: Always
+          name: name
+          ports:
+            - containerPort: 7000
+              protocol: TCP
+          env:
+            - name: SERVICE
+              value: svc3
 ---
 
 apiVersion: v1
