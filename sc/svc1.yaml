@@ -3,9 +3,9 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: debug
-  labels:
-    istio-injection: enabled
-    istio.io/rev: 1-8-1
+  # labels:
+  #   istio-injection: enabled
+  #   istio.io/rev: 1-8-1
 ---
 
 apiVersion: apps/v1
@@ -38,6 +38,10 @@ spec:
           env:
             - name: SERVICE
               value: svc1
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
 ---
 
 apiVersion: v1
