@@ -11,14 +11,14 @@ end
 def start_http_service(service, port)
   puts "starting http service #{service} on port #{port}"
 
-  set :bind, pod_ip
+  set :bind, '0.0.0.0'
   set :port, port
   get "/#{service}" do
     content_type :text
     h = get_headers request.env
     puts h
     puts "=> Receiving call from #{request.ip} REMOTE_ADDR: #{request.env["REMOTE_ADDR"]} X-Forwarded-For:#{h["X-Forwarded-For"]}"
-    "<= #{service}(#{Socket.gethostname} #{pod_ip}) say hi"
+    "<= #{service}(#{pod_name} #{pod_ip}) received\n"
   end
 end
 
@@ -35,7 +35,7 @@ def start_tcp_service(service, port)
       while line = connection.gets
         break if line =~ /quit/
         puts "=>Received from #{client}: #{line}"
-        connection.puts "Server(#{pod_ip}) received\n"
+        connection.puts "#{service}(#{ENV['POD_NAME']} #{pod_ip}) received\n"
       end
       puts "Closing the connection #{client}\n"
       connection.close
@@ -74,6 +74,10 @@ def pod_ip
 
   ip = Socket.ip_address_list.detect{|intf| intf.ipv4_private?}
   ip && ip.ip_address
+end
+
+def pod_name
+   return ENV['POD_NAME']
 end
 
 http_port = ENV['HTTP_PORT'] || 7000

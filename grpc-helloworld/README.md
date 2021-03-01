@@ -7,7 +7,7 @@ Run the server:
 ```
 $ cd server 
 $ docker build . -t zhongfox/grpc-server:v1
-$ docker run --net=host -it zhongfox/grpc-server:v1
+$ docker run -p 7001:7001 -it zhongfox/grpc-server:v1
 ```
 
 

@@ -24,4 +24,6 @@ RUN cd /go/src && \
 RUN mkdir -p /go/src/grpc-server 
 COPY main.go /go/src/grpc-server
 
+EXPOSE 7001
+
 ENTRYPOINT cd /go/src/grpc-server && go run main.go

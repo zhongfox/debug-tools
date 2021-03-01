@@ -30,7 +30,7 @@ import (
 )
 
 const (
-	address = "grpc-server:7001"
+	address = "127.0.0.1:7001"
 )
 
 func main() {
