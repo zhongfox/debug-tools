@@ -43,10 +43,10 @@ func startHTTPServers() {
 			mux := http.NewServeMux()
 			mux.HandleFunc(fmt.Sprintf("/%s", service), func(rw http.ResponseWriter, req *http.Request) {
 				log.Printf("=>Receiving call on %s from %s\n", port, req.RemoteAddr)
-				log.Println("headers:")
+				log.Println("  headers:")
 				for name, values := range req.Header {
 					for _, value := range values {
-						log.Printf("%s: %s \n", name, value)
+						log.Printf("    %s: %s \n", name, value)
 					}
 				}
 
@@ -104,7 +104,7 @@ func handleTCPConnection(port string, c net.Conn) {
 		if line == "quit" {
 			break
 		}
-		log.Printf("=>Received call on %s from %s: %s\n", port, client, line)
+		log.Printf("=>Received call on %s from %s %s\n", port, client, line)
 		c.Write([]byte(fmt.Sprintf("%s(%s %s) received\n", service, podName, podIP)))
 	}
 	log.Printf("Closing the connection %s\n", client)
