@@ -7,10 +7,12 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 )
 
 var httpPorts = os.Getenv("HTTP_PORTS")
+var udpPorts = os.Getenv("UDP_PORTS")
 var tcpPorts = os.Getenv("TCP_PORTS")
 var service = os.Getenv("SERVICE")
 var podName = os.Getenv("POD_NAME")
@@ -18,10 +20,11 @@ var podIP = os.Getenv("POD_IP")
 
 func main() {
 	if service == "" {
-		panic("miss env service, exiting")
+		service = "unknown"
 	}
 
 	startHTTPServers()
+	startUDPServers()
 	startTCPServers()
 
 	select {}
@@ -41,8 +44,9 @@ func startHTTPServers() {
 			http.NewServeMux()
 
 			mux := http.NewServeMux()
-			mux.HandleFunc(fmt.Sprintf("/%s", service), func(rw http.ResponseWriter, req *http.Request) {
-				log.Printf("=>Receiving call on %s from %s\n", port, req.RemoteAddr)
+			//mux.HandleFunc(fmt.Sprintf("/%s", service), func(rw http.ResponseWriter, req *http.Request) {
+			mux.HandleFunc("/", func(rw http.ResponseWriter, req *http.Request) {
+				log.Printf("=>Receiving call (port:%s, path:%s) from %s\n", port, req.URL.Path, req.RemoteAddr)
 				log.Println("  headers:")
 				for name, values := range req.Header {
 					for _, value := range values {
@@ -58,6 +62,49 @@ func startHTTPServers() {
 		}()
 	}
 
+}
+
+func startUDPServers() {
+	ports := udpPorts
+	if ports == "" {
+		ports = "4100"
+	}
+
+	ps := strings.Split(ports, ",")
+
+	for _, p := range ps {
+		port, err := strconv.Atoi(p)
+		if err != nil {
+			panic(err)
+		}
+		go func() {
+			log.Printf("starting udp service %s on port %d \n", service, port)
+			l, err := net.ListenUDP("udp4", &net.UDPAddr{
+				Port: port,
+				IP:   net.ParseIP("0.0.0.0"),
+			})
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer l.Close()
+
+			// Read from UDP listener in endless loop
+			for {
+				var buf [512]byte
+				_, addr, err := l.ReadFromUDP(buf[0:])
+				if err != nil {
+					log.Printf("udp read err: %v\n", err)
+					return
+				}
+
+				fmt.Print("> ", string(buf[0:]))
+
+				// Write back the message over UPD
+				l.WriteToUDP([]byte("Hello UDP Client\n"), addr)
+			}
+
+		}()
+	}
 }
 
 func startTCPServers() {

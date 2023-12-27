@@ -11,8 +11,13 @@ WORKDIR /go/
 COPY main.go .
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o anyserver .
 
-FROM alpine:latest
-RUN apk --no-cache add ca-certificates
+#FROM busybox:latest
+#FROM radial/busyboxplus:latest
+FROM alpine
+RUN apk update
+RUN apk add busybox-extras
+RUN apk add curl
+#RUN apk --no-cache add ca-certificates
 WORKDIR /root/
 COPY --from=builder /go/anyserver .
 CMD ["./anyserver"]

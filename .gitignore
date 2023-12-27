@@ -26,3 +26,5 @@
 *.swk
 *.swm
 *.swl
+
+.DS_Store
