@@ -54,7 +54,7 @@ func startHTTPServers() {
 					}
 				}
 
-				rw.Write([]byte(fmt.Sprintf("%s(%s %s:%s) received\n", service, podName, podIP, port)))
+				rw.Write([]byte(fmt.Sprintf("%s(%s %s:%s) received from %s on path %s\n", service, podName, podIP, port, req.RemoteAddr, req.URL.Path)))
 			})
 			server := http.Server{Addr: ":" + port, Handler: mux}
 			log.Printf("starting http service %s on port %s \n", service, port)

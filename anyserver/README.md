@@ -1,0 +1,1 @@
+docker build --platform=linux/amd64 -f ./Dockerfile . -t zhongfox/anyserver:v1 && docker push zhongfox/anyserver:v1
